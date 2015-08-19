@@ -5,24 +5,25 @@ class Command
 	def initialize
 		puts">>>"
 		@username = "Alvaro"
-		@password = "Ginebreda"
+		@password = IO.read("password.txt")
+	
 	end
 
-	def process
+	def ask_credencials
 		puts "Enter your username"
 		@answer_user = gets.chomp
 		puts "Enter your password"
 		@answer_pass = gets.chomp
+		process
 	end
 
-	def text
-		if (@answer_user == @username && @answer_pass = @password)
-			puts "Please write sometthing"
-			@user_text = gets.chomp
-		else 
-			puts "sometthing went wrong"
-			process
+	def process
+		if (@answer_user == @username && @answer_pass == @password)
 			choose_what
+		else 
+			puts "something went wrong"
+			ask_credencials
+			
 		end
 	end
 
@@ -31,7 +32,7 @@ class Command
 	end
 
 	def count_letters
-		puts @user_text.split.join.lenght
+		puts @user_text.split.join.length
 	end
 
 	def reverse_letters
@@ -48,6 +49,7 @@ class Command
 	
 	def choose_what
 		puts "what do you want to do with your text?" 
+		@user_text = gets.chomp
 		puts "Choose between these options: count words, count letters, reverse letters, upcase letters or downcase letters"
 		@which = gets.chomp.upcase
 		if @which == "count words".upcase
@@ -69,6 +71,4 @@ class Command
 end
 
 command = Command.new
-command.process
-command.text
-command.choose_what
+command.ask_credencials
