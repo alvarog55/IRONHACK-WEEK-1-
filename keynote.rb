@@ -1,32 +1,48 @@
 require 'terminfo'
-
 class Presentation
-    def initialize(slides_file)
-        @array_of_texts = FileReader.new(slides_file).get_slides_text
+  def initialize(slides_file)
+    @array_of_texts = FileReader.new(slides_file).get_slides_text
+    @half_screen_height = TermInfo.screen_height / 2
+    @half_screen_width  = TermInfo.screen_width  / 2
+    @current_slide_position = 0
+  end
+  def display_slides
+    print_current_slide
+    get_user_input
+  end
+  private
+  def print_current_slide
+    text = @array_of_texts[@current_slide_position]
+    puts "\n" * @half_screen_height
+    puts (" " * (@half_screen_width - text.length / 2)) + text
+    puts "\n" * (@half_screen_height - 1)
+    print "> "
+  end
+  def get_user_input
+    input = gets.chomp
+    case input.downcase
+    when "next"
+      @current_slide_position += 1
+    when "previous"
+      @current_slide_position -= 1 unless initial_slide?
+    when "quit"
+      return
     end
-
-    def display_slides
-        @array_of_texts.each do |text|
-            puts text
-        end
-    end
+    display_slides unless past_final_slide?
+  end
+  def past_final_slide?
+    @current_slide_position == @array_of_texts.size
+  end
+  def initial_slide?
+    @current_slide_position == 0
+  end
 end
-
 class FileReader
-    def initialize(slides_file)
-        @slides_file = slides_file
-    end
-
-    def get_slides_text
-        IO.read(@slides_file).split("----\n").map(&:chomp)
-    end
-    
+  def initialize(slides_file)
+    @slides_file = slides_file
+  end
+  def get_slides_text
+    IO.read(@slides_file).split("----\n").map(&:chomp)
+  end
 end
-
 Presentation.new("slides.txt").display_slides
-
-
-
-
-
-#Classes (slides, Presentation, FileReader, Userinput) Relationships(slide uses filereader> import_text, Presentation uses slides> show, Presentation uses userinput> get_commands)
