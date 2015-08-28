@@ -14,7 +14,7 @@ class Printer
 	
 	def print_board_xy(name)
 		name.chessboard.map do |x|
-			x[0]= "0,1"
+			x[0] = "0,1"
 			x[1] = "0,1"
 			x[2] = "0,1"
 			x[3] = "0,1"
