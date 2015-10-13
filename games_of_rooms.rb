@@ -5,7 +5,7 @@
 class Room
 
 	attr_accessor :doors, :description
-	def initialize (doors, description, object)
+	def initialize (doors, description)
 		@doors = doors
 		@description = description
 		@object= object
